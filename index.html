@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surpresa para Meu Amor</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #ffe6f0;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    button {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .poema {
+      font-style: italic;
+      margin: 20px 0;
+      color: #b03060;
+    }
+
+    .final {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .hearts span {
+      font-size: 30px;
+      animation: flutuar 3s ease-in-out infinite;
+      display: inline-block;
+      margin: 5px;
+    }
+
+    @keyframes flutuar {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    .galeria {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 15px;
+      margin-top: 20px;
+      align-items: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      overflow: hidden;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card img, .card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 10px;
+    }
+
+    /* Estilo para o vídeo da tela inicial */
+    .welcome video {
+      width: 100%;
+      max-height: 350px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+    }
+
+    .welcome h1 {
+      color: #ff1493;
+    }
+  </style>
+</head>
+<body onload="tocarMusica()">
+
+  <audio id="audioRomantico" autoplay loop muted>
+    <source src="AUDIO.mp3" type="audio/mpeg" />
+    Seu navegador não suporta áudio HTML5.
+  </audio>
+
+  <!-- Tela Inicial -->
+  <div class="container" id="inicio">
+    <div class="welcome">
+      <h1>Bem-vinda, minha Princesa! 💖</h1>
+      <p>Essa é uma surpresa feita com todo carinho só pra você...</p>
+      <video autoplay muted loop playsinline>
+        <source src="VID-20241217-WA0008.mp4" type="video/mp4" />
+        Seu navegador não suporta vídeos.
+      </video>
+      <button onclick="iniciarJogo()">Iniciar o Jogo 💌</button>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="container hidden" id="quizContainer">
+    <div id="quiz">
+      <h1>Para a minha Princesa ❤️</h1>
+      <p id="question">Qual é a minha comida preferida?</p>
+      <div id="options"></div>
+      <p id="feedback"></p>
+    </div>
+
+    <div id="poem" class="hidden">
+      <p>Você acertou! 🌹</p>
+      <p class="poema"></p>
+      <button onclick="nextQuestion()">Próxima 💌</button>
+    </div>
+  </div>
+
+  <script>
+    function tocarMusica() {
+      const audio = document.getElementById('audioRomantico');
+      audio.muted = false;
+      const tentarTocar = () => {
+        audio.play().catch(() => {});
+      };
+      tentarTocar();
+      document.body.addEventListener('click', tentarTocar, { once: true });
+    }
+
+    function iniciarJogo() {
+      document.getElementById('inicio').classList.add('hidden');
+      document.getElementById('quizContainer').classList.remove('hidden');
+      mostrarPergunta();
+    }
+
+    const perguntas = [
+      {
+        pergunta: "Qual é a minha comida preferida?",
+        opcoes: { a: "Pizza", b: "Você", c: "Lasanha" },
+        correta: "b",
+        poema: "Seu sorriso ilumina meus dias,<br>Como o sol aquece as manhãs frias."
+      },
+      {
+        pergunta: "Qual é o mês do nosso aniversário de namoro?",
+        opcoes: { a: "Fevereiro", b: "Março", c: "Setembro" },
+        correta: "c",
+        poema: "Cada dia contigo é poesia,<br>Te amo com toda minha energia."
+      },
+      {
+        pergunta: "Qual é a minha cor favorita?",
+        opcoes: { a: "Azul", b: "Vermelho", c: "Preta" },
+        correta: "c",
+        poema: "Na paleta da vida, você é meu tom mais vivo,<br>Colorindo meu mundo, tornando-o mais bonito e ativo."
+      },
+      {
+        pergunta: "Qual foi o nosso primeiro filme juntos?",
+        opcoes: { a: "Submissão", b: "50 Tons de Cinza", c: "Minha Culpa: Londres" },
+        correta: "b",
+        poema: "Nosso amor é como filme de cinema,<br>Cheio de emoção, riso e poema."
+      },
+      {
+        pergunta: "Qual é o meu maior sonho?",
+        opcoes: { a: "Viajar o mundo contigo", b: "Comprar uma casa, casar e ter filhos", c: "Ser famoso" },
+        correta: "a",
+        poema: "Se o sonho é ao seu lado, tudo faz sentido,<br>Com você, todo destino é mais lindo."
+      },
+      {
+        pergunta: "Qual apelido carinhoso eu mais uso com você?",
+        opcoes: { a: "Amorzinho", b: "Vida", c: "Princesa" },
+        correta: "c",
+        poema: "Entre tantos nomes no mundo inteiro,<br>Você é minha princesa, meu amor verdadeiro."
+      }
+    ];
+
+    let indice = 0;
+
+    function mostrarPergunta() {
+      const q = perguntas[indice];
+      document.getElementById('question').innerText = q.pergunta;
+      const opcoesDiv = document.getElementById('options');
+      opcoesDiv.innerHTML = '';
+      for (let key in q.opcoes) {
+        const btn = document.createElement('button');
+        btn.textContent = q.opcoes[key];
+        btn.onclick = () => checkAnswer(key);
+        opcoesDiv.appendChild(btn);
+      }
+      document.getElementById('feedback').innerText = '';
+    }
+
+    function checkAnswer(resposta) {
+      const correta = perguntas[indice].correta;
+      const feedback = document.getElementById('feedback');
+      if (resposta === correta) {
+        document.getElementById('quiz').classList.add('hidden');
+        document.getElementById('poem').classList.remove('hidden');
+        document.querySelector('.poema').innerHTML = perguntas[indice].poema;
+        feedback.innerText = '';
+      } else {
+        feedback.innerText = 'Hmm... tenta de novo, Princesa 💔';
+      }
+    }
+
+    function nextQuestion() {
+      indice++;
+      if (indice >= perguntas.length) {
+        document.body.innerHTML = `
+          <audio id="audioRomantico" autoplay loop>
+            <source src="musica-romantica.mp3" type="audio/mpeg">
+          </audio>
+          <div class="container final">
+            <h1>Você chegou ao fim, meu amor! 💖</h1>
+            <p>Obrigado por existir, por me fazer sorrir,<br>por ser minha paz e meu caos favorito.</p>
+            <p>Te amo infinitamente! 💘</p>
+            <div class="hearts">
+              <span>❤️</span><span>💕</span><span>💓</span><span>💗</span><span>💖</span>
+            </div>
+            <div class="galeria">
+              <div class="card">
+                <img src="foto1.jpg" alt="nossa foto 1" />
+              </div>
+              <div class="card">
+                <video controls>
+                  <source src="video1.mp4" type="video/mp4" />
+                  Seu navegador não suporta vídeos.
+                </video>
+              </div>
+              <div class="card">
+                <img src="foto2.jpg" alt="nossa foto 2" />
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById('quiz').classList.remove('hidden');
+      document.getElementById('poem').classList.add('hidden');
+      mostrarPergunta();
+    }
+  </script>
+</body>
+</html>
